@@ -21,7 +21,6 @@ public class UserController {
     private  final UserService userService;
 
 
-
     @PostMapping("/join")
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest request){
 
