@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: local
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://52.78.155.26:3306/PockyDB
+    username: centerfoward
+    password: b08267410ab@
+jpa:
+  properties:
+    hibernate:
+      ddl-auto: update
+      show_sql: true
+      format_sql: true
+logging.level:
+  org.hibernate.SQL: debug
+jwt.secret-key:  SpringProjectSns_2024.09.23.secret_key
+jwt.token.expired-time-ms: 3600
