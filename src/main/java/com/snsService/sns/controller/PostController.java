@@ -1,7 +1,9 @@
 package com.snsService.sns.controller;
 
+import com.snsService.sns.controller.request.PostCommentRequest;
 import com.snsService.sns.controller.request.PostCreateRequest;
 import com.snsService.sns.controller.request.PostModifyRequest;
+import com.snsService.sns.controller.response.CommentResponse;
 import com.snsService.sns.controller.response.PostResponse;
 import com.snsService.sns.controller.response.Response;
 import com.snsService.sns.model.Post;
@@ -68,6 +70,20 @@ public class PostController {
 
         postService.like(postId,authentication.getName());
         return Response.success();
+    }
+    @PostMapping("/{postId}/comments")
+    public  Response<Void> comment(@PathVariable Integer postId, @RequestBody PostCommentRequest request, Authentication authentication){
+        postService.comment(postId,authentication.getName(),request.getComment());
+
+
+        return  Response.success();
+    }
+
+    @GetMapping("/{postId}/comments")
+    public  Response<Page<CommentResponse>> comment(@PathVariable Integer postId, Pageable pageable, @RequestBody PostCommentRequest request, Authentication authentication){
+        postService.getComments(postId,pageable);
+
+        return  Response.success(postService.getComments(postId,pageable).map(CommentResponse::fromComment));
     }
 
 }

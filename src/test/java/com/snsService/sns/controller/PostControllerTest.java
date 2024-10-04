@@ -2,6 +2,7 @@ package com.snsService.sns.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.snsService.sns.controller.request.PostCommentRequest;
 import com.snsService.sns.controller.request.PostCreateRequest;
 import com.snsService.sns.controller.request.UserJoinRequest;
 import  com.snsService.sns.controller.request.PostModifyRequest;
@@ -257,4 +258,37 @@ public class PostControllerTest {
 
     }
 
+
+    @Test
+    @WithMockUser
+    void 댓글기능() throws  Exception{
+        mvc.perform(post("/api/v1/posts/1/comments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new PostCommentRequest("comment"))))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+    }
+    @Test
+    @WithMockUser
+    void 댓글작성시_로그인하지_않은경우() throws  Exception{
+        mvc.perform(post("/api/v1/posts/1/comments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(new PostCommentRequest("comment"))))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+    }
+
+
+    @Test
+    @WithMockUser
+    void 댓글작성시_게시물이_없는경우() throws  Exception{
+        doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).comment(any(),any(),any());
+        mvc.perform(post("/api/v1/posts/1/comments")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+    }
 }
